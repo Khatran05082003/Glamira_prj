@@ -1,0 +1,9 @@
+
+version: 2
+
+
+sources:
+  - name: glamira_dataset
+    tables:
+      - name: glamira_raw
+
