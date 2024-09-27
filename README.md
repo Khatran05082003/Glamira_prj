@@ -35,7 +35,7 @@ The data pipeline is designed to extract and process data from www.glamira.com, 
 
 To clone the repository, run the following command:
 ```bash
-git clone https://github.com/yourusername/your-repository.git
+git clone https://github.com/Khatran05082003/Glamira_prj.git
 ```
 #### Install Required Libraries
 Make sure to install the necessary Python libraries listed in requirements.txt. You can do this by running:
