@@ -23,7 +23,7 @@ The data pipeline is designed to extract and process data from www.glamira.com, 
   - **Looker Studio:** For visualizing the architecture and insights.
 
 ### ETL Workflow
-1. Execute the scripts `product_name_soup.ipynb` and `IP_glamira-python.py` to collect all relevant properties, including product names and IP details.
+1. Execute the scripts `crawl_product_name.py` and `get_IP_location.py` to collect all relevant properties, including product names and IP details.
 2. Store the raw data, product names, and IP locations in Google Cloud Storage.
 3. Establish a Cloud Function to initiate data transfer from Cloud Storage to BigQuery according to the defined schema.
 4. Employ dbt to convert raw data into a structured data warehouse schema.
