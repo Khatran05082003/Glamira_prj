@@ -263,3 +263,45 @@ There are 1 unused configuration paths:
 [0m00:11:15.462926 [debug] [MainThread]: Command `dbt run` succeeded at 00:11:15.462926 after 2.18 seconds
 [0m00:11:15.463928 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000018FB6273EE0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000018FB663CCA0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000018FCAD6D510>]}
 [0m00:11:15.463928 [debug] [MainThread]: Flushing usage events
+[0m15:54:26.375270 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5C283F10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5EB5DFF0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5EB5DE70>]}
+
+
+============================== 15:54:26.382162 | 6c8735cb-496c-4d3a-8853-ca7b554b6e8e ==============================
+[0m15:54:26.382162 [info ] [MainThread]: Running with dbt=1.6.3
+[0m15:54:26.384158 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\ACER\\.dbt', 'fail_fast': 'False', 'debug': 'False', 'log_path': 'logs', 'warn_error': 'None', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'invocation_command': 'dbt run --models stg_raw', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m15:54:26.385247 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\ACER\Downloads\glamira_prj\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m15:54:26.387156 [debug] [MainThread]: Command `dbt run` failed at 15:54:26.387156 after 0.05 seconds
+[0m15:54:26.388243 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5C283F10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5EB5D480>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000025E5EB5E050>]}
+[0m15:54:26.389160 [debug] [MainThread]: Flushing usage events
+[0m22:43:00.901613 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021598EA7820>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002159B77A0E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002159B779F60>]}
+
+
+============================== 22:43:00.906609 | 954e3903-980a-48ac-98d2-bc9565dced9a ==============================
+[0m22:43:00.906609 [info ] [MainThread]: Running with dbt=1.6.3
+[0m22:43:00.907611 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': 'C:\\Users\\ACER\\.dbt', 'debug': 'False', 'fail_fast': 'False', 'log_path': 'logs', 'warn_error': 'None', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'invocation_command': 'dbt run --models stg_raw', 'static_parser': 'True', 'introspect': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m22:43:00.908698 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\ACER\Downloads\glamira_prj\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m22:43:00.910610 [debug] [MainThread]: Command `dbt run` failed at 22:43:00.910610 after 0.03 seconds
+[0m22:43:00.910610 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000021598EA7820>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002159B779570>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000002159B77A140>]}
+[0m22:43:00.911700 [debug] [MainThread]: Flushing usage events
+[0m19:11:50.749699 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A5118B3EB0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A51418E050>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A51418DED0>]}
+
+
+============================== 19:11:50.758712 | f9d8946e-ca8a-4b0b-81f3-f47dc5513ec1 ==============================
+[0m19:11:50.758712 [info ] [MainThread]: Running with dbt=1.6.3
+[0m19:11:50.759709 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': 'C:\\Users\\ACER\\.dbt', 'log_path': 'logs', 'fail_fast': 'False', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt run --models fact_order', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m19:11:50.760708 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\Users\ACER\Downloads\glamira_prj\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m19:11:50.762725 [debug] [MainThread]: Command `dbt run` failed at 19:11:50.762725 after 0.03 seconds
+[0m19:11:50.763721 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A5118B3EB0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A51418D4E0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001A51418E0B0>]}
+[0m19:11:50.764715 [debug] [MainThread]: Flushing usage events

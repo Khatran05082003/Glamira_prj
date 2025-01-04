@@ -38,3 +38,10 @@ WITH dim_date AS (
 SELECT * 
 FROM dim_date
 
+
+
+
+
+
+
+

@@ -1,7 +1,7 @@
 WITH stg_table AS (
   SELECT 
     *
-  FROM `glamira-prj.glamira_dataset.json_product_name_ndjson` 
+  FROM `main-cocoa-445214-r4.glamira_dataset.json_product_name_ndjson` 
 ),
 stg_table__rename__cast_type AS (
   SELECT

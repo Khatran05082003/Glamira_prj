@@ -11,5 +11,3 @@ SELECT DISTINCT
   product_id,
   product_name
 FROM dim_product
-WHERE product_id IS NOT NULL
-  AND product_name IS NOT NULL

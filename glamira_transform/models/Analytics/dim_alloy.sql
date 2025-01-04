@@ -2,12 +2,15 @@ WITH stg_color_source AS (
   SELECT
     *
   FROM
-    `glamira-prj.glamira_dataset.glamira_raw`
+    `main-cocoa-445214-r4.glamira_dataset.summary`
 ),
 stg_color__code_value AS (
   SELECT
     DISTINCT
-    option.value_label AS alloy_value,
+    CASE
+      WHEN STRPOS(option.value_label, '&') > 0 THEN SUBSTR(option.value_label, 1, STRPOS(option.value_label, '&') - 1)
+      ELSE option.value_label
+    END AS alloy_value,
     CASE
       WHEN STRPOS(option.value_label, '-') > 0 THEN SUBSTR(option.value_label, 1, STRPOS(option.value_label, '-') - 1)
       ELSE option.value_label
@@ -22,7 +25,7 @@ stg_metal_source AS (
   SELECT
     *
   FROM
-    `glamira-prj.glamira_dataset.glamira_raw`
+    `main-cocoa-445214-r4.glamira_dataset.summary`
 ),
 stg_metal__code_value AS (
   SELECT

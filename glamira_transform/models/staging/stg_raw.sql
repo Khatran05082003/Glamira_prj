@@ -3,11 +3,8 @@ WITH RawData AS (
     IFNULL(viewing_product_id, 'Unknown') AS viewing_product_id,
     IFNULL(user_agent, 'Unknown') AS user_agent,
     IFNULL(collect_id, 'Unknown') AS collect_id,
-    SAFE_CAST(IFNULL(product_id, -1) AS INT64) AS product_id,  
+    IFNULL(product_id, -1) AS product_id,  
     IFNULL(collection, 'Unknown') AS collection,
-    IFNULL(SAFE_CAST(REPLACE(REPLACE(price, ',', ''), '.', '.') AS FLOAT64), 0) AS price,
-    IFNULL(currency, 'Unknown') AS currency,
-    SAFE_CAST(IFNULL(amount, 0) AS INT64) AS amount,
     IFNULL(utm_source, 'Unknown') AS utm_source,
     IFNULL(recommendation, 'Unknown') AS recommendation,
     IFNULL(utm_medium, 'Unknown') AS utm_medium,
@@ -27,20 +24,75 @@ WITH RawData AS (
     IFNULL(store_id, 'Unknown') AS store_id,
     CAST(REGEXP_EXTRACT(TO_JSON_STRING(time_stamp), r'"\$numberInt":"(\d+)"') AS STRING) AS time_stamp,
     CAST(TIMESTAMP_SECONDS(CAST(REGEXP_EXTRACT(TO_JSON_STRING(time_stamp), r'"\$numberInt":"(\d+)"') AS INT64)) AS DATE) AS full_date,
+    
+    -- Tách dữ liệu 'option' thành các trường con
     ARRAY(
-            SELECT AS STRUCT
-                NULLIF(option.alloy,"Unknown") as alloy,
-                NULLIF(option.diamond,"Unknown") as diamond,
-                NULLIF(option.option_label,"Unknown") as option_label,
-                NULLIF(option.option_id,"Unknown") as option_id,
-                NULLIF(option.value_label,"Unknown") as value_label,
-                NULLIF(option.value_id,"Unknown") as value_id,
-                NULLIF(option.quality,"Unknown") as quality,
-                NULLIF(option.quality_label,"Unknown") as quality_label
-            FROM UNNEST(option) AS option
+      SELECT AS STRUCT
+        NULLIF(option.alloy, "Unknown") AS alloy,
+        NULLIF(option.diamond, "Unknown") AS diamond,
+        NULLIF(option.option_label, "Unknown") AS option_label,
+        NULLIF(option.option_id, "Unknown") AS option_id,
+        NULLIF(option.value_label, "Unknown") AS value_label,
+        NULLIF(option.value_id, "Unknown") AS value_id,
+        NULLIF(option.quality, "Unknown") AS quality,
+        NULLIF(option.quality_label, "Unknown") AS quality_label
+      FROM UNNEST(option) AS option
+    ) AS option,
+    
+    -- Tách dữ liệu 'cart_products' thành các trường con
+    ARRAY(
+      SELECT AS STRUCT
+        CASE
+          -- Format with dot as thousand separator and comma as decimal separator (e.g., 10.497.373,00)
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r'^[0-9]{1,3}(\.[0-9]{3})*,[0-9]{2}$') THEN 
+              CAST(REPLACE(REPLACE(TRIM(cart_products.price), '.', ''), ',', '.') AS FLOAT64)
+
+          -- Format with comma as thousand separator and dot as decimal separator (e.g., 1,234.56)
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r'^[0-9]{1,3}(,[0-9]{3})*\.[0-9]{2}$') THEN 
+              CAST(REPLACE(TRIM(cart_products.price), ',', '') AS FLOAT64)
+
+          -- Format with apostrophe as thousand separator and dot as decimal separator (e.g., 3'583.00)
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r"^\d+'?\d*\.\d{2}$") THEN 
+              CAST(REPLACE(TRIM(cart_products.price), "'", "") AS FLOAT64)
+
+          -- Format with simple decimal (e.g., 1234.56 or 1234)
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r'^\d+(\.\d+)?$') THEN 
+              CAST(TRIM(cart_products.price) AS FLOAT64)
+
+          -- Handle case like '20,933' converting to '20933'
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r'^\d{1,3}(,\d{3})*$') THEN 
+              CAST(REPLACE(TRIM(cart_products.price), ',', '') AS FLOAT64)
+
+          -- Handle case like '61٫00' converting to '61'
+          WHEN REGEXP_CONTAINS(TRIM(cart_products.price), r'^\d+[\.٫]\d{2}$') THEN 
+              CAST(TRIM(REGEXP_REPLACE(cart_products.price, r'[٫.]', '')) AS FLOAT64)
+
+          ELSE
+              0  
+        END AS price,
+        COALESCE(NULLIF(TRIM(CAST(cart_products.currency AS STRING)), ""), "Unknown") AS currency,
+        NULLIF(CAST(REGEXP_EXTRACT(TO_JSON_STRING(cart_products.amount), r'"\$numberInt":"(\d+)"') AS INT64), 0) AS amount,
+        CAST(REGEXP_EXTRACT(TO_JSON_STRING(cart_products.product_id), r'"\$numberInt":"(\d+)"') AS INT64) AS product_id,
+        ARRAY(
+          SELECT AS STRUCT
+            CAST(REGEXP_EXTRACT(TO_JSON_STRING(option), r'"option_id"\:\{"\$numberInt":"(\d+)"\}') AS STRING) AS option_id,
+            CAST(REGEXP_EXTRACT(TO_JSON_STRING(option), r'"value_id"\:\{"\$numberInt":"(\d+)"\}') AS STRING) AS value_id,
+            CASE
+                WHEN JSON_EXTRACT_SCALAR(TO_JSON_STRING(option), '$.option_label') = 'diamond' THEN 
+                  JSON_EXTRACT_SCALAR(TO_JSON_STRING(option), '$.value_label')
+                ELSE 'Unknown'
+              END AS value_label_diamond,
+              CASE
+                WHEN JSON_EXTRACT_SCALAR(TO_JSON_STRING(option), '$.option_label') = 'alloy' THEN 
+                  JSON_EXTRACT_SCALAR(TO_JSON_STRING(option), '$.value_label')
+                ELSE 'Unknown'
+              END AS value_label_alloy
+          FROM UNNEST(JSON_EXTRACT_ARRAY(option)) AS option
         ) AS option
+        FROM UNNEST(cart_products) AS cart_products
+    ) AS cart_products
   FROM
-    `glamira-prj.glamira_dataset.glamira_raw`
+    main-cocoa-445214-r4.glamira_dataset.summary
 ),
 
 stg_glamira_raw__add_undefined_record AS (
@@ -50,9 +102,6 @@ stg_glamira_raw__add_undefined_record AS (
     collect_id,
     product_id,  
     collection,
-    price,
-    currency,
-    amount,
     utm_source,
     recommendation,
     utm_medium,
@@ -72,18 +121,8 @@ stg_glamira_raw__add_undefined_record AS (
     store_id,
     time_stamp,
     full_date,
-    ARRAY(
-            SELECT AS STRUCT
-                option.alloy,
-                option.diamond,
-                option.option_label,
-                option.option_id AS option_id,
-                option.value_label,
-                option.value_id ,
-                option.quality,
-                option.quality_label
-            FROM UNNEST(option) AS option
-        ) AS option
+    option,
+    cart_products
   FROM RawData
 
   UNION ALL
@@ -94,9 +133,6 @@ stg_glamira_raw__add_undefined_record AS (
     'Unknown' AS collect_id,
     -1 AS product_id, 
     'Unknown' AS collection,
-    0 AS price,
-    'Unknown' AS currency,
-    0 AS amount, 
     'Unknown' AS utm_source,
     'Unknown' AS recommendation,
     'Unknown' AS utm_medium,
@@ -116,20 +152,38 @@ stg_glamira_raw__add_undefined_record AS (
     'Unknown' AS store_id,
     'Unknown' AS time_stamp,
     DATE('1970-01-01') AS full_date,
+    
+    -- Giá trị mặc định cho 'option'
     ARRAY(
-        SELECT AS STRUCT
-            'Unknown' AS alloy,
-            'Unknown' AS diamond,
-            'Unknown' AS option_label,
+      SELECT AS STRUCT
+        'Unknown' AS alloy,
+        'Unknown' AS diamond,
+        'Unknown' AS option_label,
+        'Unknown' AS option_id,
+        'Unknown' AS value_label,
+        'Unknown' AS value_id,
+        'Unknown' AS quality,
+        'Unknown' AS quality_label
+    ) AS option,
+    
+    -- Giá trị mặc định cho 'cart_products'
+    ARRAY(
+      SELECT AS STRUCT
+        CAST(0 AS FLOAT64) AS price, 
+        'Unknown' AS currency,
+        CAST(0 AS INT64) AS amount,
+        CAST(-1 AS INT64) AS product_id,
+        ARRAY(
+          SELECT AS STRUCT
             'Unknown' AS option_id,
-            'Unknown' AS value_label,
             'Unknown' AS value_id,
-            'Unknown' AS quality,
-            'Unknown' AS quality_label
-    ) AS option
+            'Unknown' AS value_label_diamond,
+            'Unknown' AS value_label_alloy
+        ) AS options
+      ) AS cart_products
+
 )
 
-SELECT
+SELECT distinct
   *
 FROM stg_glamira_raw__add_undefined_record
-WHERE collection = 'checkout_success'

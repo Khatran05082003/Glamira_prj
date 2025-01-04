@@ -1,7 +1,7 @@
 WITH stg_location AS (
   SELECT 
     *
-  FROM `glamira-prj.glamira_dataset.location`
+  FROM `main-cocoa-445214-r4.glamira_dataset.location`
 ),
 stg_location__rename__cast_type AS (
   SELECT
