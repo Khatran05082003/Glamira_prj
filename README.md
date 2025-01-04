@@ -61,6 +61,7 @@ def connect_db():
 
 #### Data transform
 Use SQL and dbt to transform raw data to Dimensional model in Bigquery. Save in layer glamira_transform. Please survey your dataset first and Filter collection key = "checkout_success" for fact table(file in `dbt`)
+This is schema of data warehouse in my project ![471869237_896236892721838_9127615373039329563_n](https://github.com/user-attachments/assets/df03028d-f428-4d43-9fc6-c3d49fc25ee4)
 
 ### Data visualization
 - [ ]  Import data model into Looker and Visualize data to answer below questions
