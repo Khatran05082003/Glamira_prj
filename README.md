@@ -29,14 +29,10 @@ The pipeline take data from [www.glamira.com](www.glamira.com) and transform int
 - You run a code in `product_name_soup.ipynb` and `IP_glamira-python.py` to crawl all properties relate to data(product name and ip detail)
 - Raw data , product name, ip location save in Google Cloud Storage
     - raw data 
-    ![raw data](photo_readme\raw_data.png)
     - product name
-    ![product name](photo_readme\product_name.png)
     - ip location
-    ![ip location](photo_readme\ip_location.png)
   - create cloud function to trigger from cloud storage to bigquery use `schema`
   - use `dbt` to transform raw data to datawarehouse
-  ![schema](photo_readme\schema.png)
   - use Looker Studio to visualize
 ### How to run
 #### Data collection
@@ -66,8 +62,9 @@ This is schema of data warehouse in my project ![471869237_896236892721838_91276
 ### Data visualization
 - [ ]  Import data model into Looker and Visualize data to answer below questions
 - Which products (product_name) generate the most revenue?
-- How do the total sales (line_total) trend over different months?
+- How do the total sales (line_total) trend over different days?
 - How are sales distributed across different countries (country_name)?
+- How are revenue distribute with alloy and diamond?
 You can reference my report [Looker Studio](https://lookerstudio.google.com/u/0/reporting/c0fd6bca-1ced-466a-a3d9-9a957b56fb35/page/8FuaE?fbclid=IwY2xjawHl3GtleHRuA2FlbQIxMAABHee1xGZTJ-3GSaxJ3bnWldd5xnDMDdo5L6R45fvltYHweEHrZGUjjrHklQ_aem_R8lb1IcNSiMTET7uk-3E2w)
 
 
