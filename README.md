@@ -24,7 +24,7 @@ In this project, we'll use dbt (Data Build Tool) and SQL on Google BigQuery for 
 The pipeline take data from [www.glamira.com](www.glamira.com) and transform into insight data
  - **Google cloud platform**: Cloud storage(load raw data),bigquery (load schema data and transform shema data), cloud function (trigger data in Cloud storage into bigquery), 
  - **Looker studio**: visualize data
- ![architecture diagram](https://davidnotio101.notion.site/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fccfa8b66-a3f6-43a1-8348-a8ac806c0223%2F4db388b6-2cfa-427c-ba52-fa66f1c5b297%2FUntitled.png?table=block&id=55cd18e5-b521-4bbe-8b57-bb7de81f5332&spaceId=ccfa8b66-a3f6-43a1-8348-a8ac806c0223&width=1440&userId=&cache=v2)
+ ![architecture diagram](![471869237_896236892721838_9127615373039329563_n](https://github.com/user-attachments/assets/584a065c-00ed-4dd1-8351-0f03c3b27077))
 # ETL flow
 - You run a code in `product_name_soup.ipynb` and `IP_glamira-python.py` to crawl all properties relate to data(product name and ip detail)
 - Raw data , product name, ip location save in Google Cloud Storage
