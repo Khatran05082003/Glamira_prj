@@ -35,6 +35,16 @@ The pipeline take data from [www.glamira.com](www.glamira.com) and transform int
   - use `dbt` to transform raw data to datawarehouse
   - use Looker Studio to visualize
 ### How to run
+#### Data Profiling
+The data profiling steps are designed to analyze and assess the quality of the data in the `SeminarCollection` collection, including:
+1. **Identify columns and data types**: Determine the field names and data types in the collection to ensure consistency and data integrity.
+2. **Count null values**: Check and count the number of `null` values in each field to assess the completeness of the data.
+3. **Count distinct values**: Detect and remove duplicate rows by counting distinct values in key fields like `time_stamp`, `ip`, `user_agent`, etc.
+4. **Check data type consistency**: Ensure that fields such as `price` have valid data types and formats (e.g., decimal format).
+5. **Data completeness**: Count the total number of documents in the collection to evaluate the completeness and fullness of the data.
+6. **Determine data range**: Check the time range of the collected data from the first to the last timestamp to understand the span of the dataset.
+7. **Currency validation**: Count and sort the different `currency` values in the dataset to identify the variety and distribution of currencies.
+
 #### Data collection
 - As data lack of information, so we need to crawl more inforamtion in Glamira web, especially **product name**.(Crawl product name in file `crawl_data`)
 - Suplement data with extending ip(use file `IPLocation-Python-master`) 
