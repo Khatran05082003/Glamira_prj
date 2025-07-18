@@ -1,3 +1,10 @@
 functions-framework==3.*
 google-cloud-bigquery
 google-cloud-storage
+streamlit
+scikit-learn
+pandas
+numpy
+google-auth
+Pillow
+streamlit-searchbox
