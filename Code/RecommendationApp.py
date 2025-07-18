@@ -9,10 +9,11 @@ from PIL import Image
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 from streamlit_searchbox import st_searchbox
+import json 
 
 # ----- Config -----
-SERVICE_ACCOUNT_PATH = r"C:\Users\ACER\Downloads\ServiceAccount.json"
 BUCKET_NAME = "glamira-project-storage"
+SERVICE_ACCOUNT_GCS_PATH = "data/ServiceAccount.json"  # đường dẫn trên GCS
 FILE_NAME_HYBRID = "models/recommendation_objects_Hybrid.pkl"
 FILE_NAME_ITEM2ITEM = "models/recommendation_objects_Item2Item.pkl"
 BANNER_IMAGE_URL = "https://cdn-media.glamira.com/media/bannerslider16/30_april_banner_25_vn.jpg"
@@ -28,17 +29,30 @@ svd_model = None
 trainset = None
 cosine_sim_item_item = None
 
+# ----- Load service account from GCS -----
+@st.cache_resource
+@st.cache_resource
+def get_service_account_credentials():
+    client = storage.Client()
+    bucket = client.bucket(BUCKET_NAME)
+    blob = bucket.blob(SERVICE_ACCOUNT_GCS_PATH)
+    with BytesIO() as f:
+        blob.download_to_file(f)
+        f.seek(0)
+        return service_account.Credentials.from_service_account_info(
+            json.load(f),  # Sửa từ pickle.load -> json.load
+            scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
+
 # ----- GCS & BigQuery Clients -----
 @st.cache_resource
 def init_gcs_client():
-    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = SERVICE_ACCOUNT_PATH
-    return storage.Client()
+    credentials = get_service_account_credentials()
+    return storage.Client(credentials=credentials, project=credentials.project_id)
 
 @st.cache_resource
 def init_bigquery_client():
-    credentials = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_PATH, scopes=["https://www.googleapis.com/auth/cloud-platform"]
-    )
+    credentials = get_service_account_credentials()
     return bigquery.Client(credentials=credentials, project=credentials.project_id)
 
 # ----- Load models -----
@@ -71,6 +85,9 @@ def load_product_names_from_bigquery():
         WHERE product_name IS NOT NULL
     """
     return [row.product_name for row in client.query(query).result()]
+
+# (phần còn lại giữ nguyên không thay đổi)
+
 
 # ----- Image & Display -----
 def display_product_image(product_id):
