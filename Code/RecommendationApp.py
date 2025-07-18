@@ -30,18 +30,13 @@ trainset = None
 cosine_sim_item_item = None
 
 # ----- Load service account from GCS -----
-@st.cache_resource
+SERVICE_ACCOUNT_PATH = "target/ServiceAccount.json"
+
 @st.cache_resource
 def get_service_account_credentials():
-    client = storage.Client()
-    bucket = client.bucket(BUCKET_NAME)
-    blob = bucket.blob(SERVICE_ACCOUNT_GCS_PATH)
-    with BytesIO() as f:
-        blob.download_to_file(f)
-        f.seek(0)
+    with open(SERVICE_ACCOUNT_PATH, "r") as f:
         return service_account.Credentials.from_service_account_info(
-            json.load(f),  # Sửa từ pickle.load -> json.load
-            scopes=["https://www.googleapis.com/auth/cloud-platform"]
+            json.load(f), scopes=["https://www.googleapis.com/auth/cloud-platform"]
         )
 
 # ----- GCS & BigQuery Clients -----
