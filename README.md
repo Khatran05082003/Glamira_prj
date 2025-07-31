@@ -77,4 +77,27 @@ This is schema of data warehouse in my project ![471869237_896236892721838_91276
 - How are revenue distribute with alloy and diamond?
 You can reference my report [Looker Studio](https://lookerstudio.google.com/u/0/reporting/c0fd6bca-1ced-466a-a3d9-9a957b56fb35/page/8FuaE?fbclid=IwY2xjawHl3GtleHRuA2FlbQIxMAABHee1xGZTJ-3GSaxJ3bnWldd5xnDMDdo5L6R45fvltYHweEHrZGUjjrHklQ_aem_R8lb1IcNSiMTET7uk-3E2w)
 
+### Recommendation System
+- [x] Built recommendation system to enhance personalized user experience.
+- 📌 **Techniques Used**:
+  - **Item-to-User Collaborative Filtering**: Suggest products to users based on similar users' behavior.
+  - **Item-to-Item Similarity**: Recommend similar products based on product co-occurrence or similarity metrics.
+- ⚙️ **Data Processing**: User-product interaction matrix was built using purchase history and product attributes.
+- 🚀 **Demo App**:
+  - Developed an interactive app using **Streamlit** to allow users to test and explore recommendations.
+  - Features include:
+    - Entering a user email to get personalized recommendations.
+    - Choosing a product to get similar product recommendations.
+
+<img width="1681" height="666" alt="518157808_1430774288164886_600609317733105453_n" src="https://github.com/user-attachments/assets/a2cbcc7c-e175-4053-839c-882f72dde1e2" />
+<img width="1628" height="519" alt="519949389_1294922161998010_8718763120915204678_n" src="https://github.com/user-attachments/assets/bcc46b49-bb58-405d-aef7-360fefdc130a" />
+<img width="1622" height="829" alt="518824061_1079721106922451_9134499011795668295_n" src="https://github.com/user-attachments/assets/4625f6da-e3e7-411f-873a-06427b751329" />
+<img width="1596" height="613" alt="518769209_2664062787269472_7686603722646551876_n" src="https://github.com/user-attachments/assets/ec8a756f-2045-4d33-b74d-d4911165941e" /> 
+<img width="1881" height="843" alt="518252451_1919728565470434_2171709965157296504_n" src="https://github.com/user-attachments/assets/e12a8c62-3310-43b2-905f-6f74fe112a0e" />
+
+
+
+
+
+
 
