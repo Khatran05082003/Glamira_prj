@@ -9,11 +9,10 @@ from PIL import Image
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import MinMaxScaler
 from streamlit_searchbox import st_searchbox
-import json 
 
 # ----- Config -----
+SERVICE_ACCOUNT_PATH = r"C:\Users\ACER\Downloads\project2-423018-69501aab6524.json"
 BUCKET_NAME = "glamira-project-storage"
-SERVICE_ACCOUNT_GCS_PATH = "data/ServiceAccount.json"  # đường dẫn trên GCS
 FILE_NAME_HYBRID = "models/recommendation_objects_Hybrid.pkl"
 FILE_NAME_ITEM2ITEM = "models/recommendation_objects_Item2Item.pkl"
 BANNER_IMAGE_URL = "https://cdn-media.glamira.com/media/bannerslider16/30_april_banner_25_vn.jpg"
@@ -29,25 +28,17 @@ svd_model = None
 trainset = None
 cosine_sim_item_item = None
 
-# ----- Load service account from GCS -----
-SERVICE_ACCOUNT_PATH = "target/ServiceAccount.json"
-
-@st.cache_resource
-def get_service_account_credentials():
-    with open(SERVICE_ACCOUNT_PATH, "r") as f:
-        return service_account.Credentials.from_service_account_info(
-            json.load(f), scopes=["https://www.googleapis.com/auth/cloud-platform"]
-        )
-
 # ----- GCS & BigQuery Clients -----
 @st.cache_resource
 def init_gcs_client():
-    credentials = get_service_account_credentials()
-    return storage.Client(credentials=credentials, project=credentials.project_id)
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = SERVICE_ACCOUNT_PATH
+    return storage.Client()
 
 @st.cache_resource
 def init_bigquery_client():
-    credentials = get_service_account_credentials()
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_PATH, scopes=["https://www.googleapis.com/auth/cloud-platform"]
+    )
     return bigquery.Client(credentials=credentials, project=credentials.project_id)
 
 # ----- Load models -----
@@ -80,9 +71,6 @@ def load_product_names_from_bigquery():
         WHERE product_name IS NOT NULL
     """
     return [row.product_name for row in client.query(query).result()]
-
-# (phần còn lại giữ nguyên không thay đổi)
-
 
 # ----- Image & Display -----
 def display_product_image(product_id):
@@ -405,10 +393,17 @@ def main():
             st.markdown("<div class='recommendation-section'>", unsafe_allow_html=True)
             st.markdown(f"### 🧲 Sản phẩm tương tự")
             
-            similar_df = get_similar_items(selected_row['final_product_id'], top_n=top_n * 2)
+            selected_pid = str(selected_row['final_product_id'])
+
+            similar_df = get_similar_items(selected_pid, top_n=top_n * 3)  # lấy dư để lọc
+            # Bỏ sản phẩm được chọn ra khỏi kết quả
+            filtered_df = similar_df[similar_df['final_product_id'] != selected_pid]
+
+            # Kiểm tra ảnh
             products_with_images = [
-                row for _, row in similar_df.iterrows() if product_image_exists(row['final_product_id'])
+                row for _, row in filtered_df.iterrows() if product_image_exists(row['final_product_id'])
             ][:top_n]
+
 
             if products_with_images:
                 num_columns = 5
